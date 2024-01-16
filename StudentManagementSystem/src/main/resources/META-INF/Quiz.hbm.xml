@@ -1,0 +1,27 @@
+<hibernate-mapping xmlns="http://www.hibernate.org/xsd/hibernate-mapping">
+    <class name="org.example.models.Quiz" table="quiz">
+        <id name="id" type="java.lang.Integer">
+            <column name="id"/>
+            <generator class="identity"/>
+        </id>
+
+        <property name="name" column="name" type="java.lang.String"/>
+        <property name="score" column="score" type="java.lang.Integer"/>
+        <property name="totalScore" column="total_score" type="java.lang.Integer"/>
+        <property name="createdAt" column="created_at" type="java.lang.String"/>
+
+        <!-- Many-to-One Relationship -->
+        <many-to-one name="course" column="course_id" class="org.example.models.Course"/>
+
+        <!-- Many-to-Many Relationship with student -->
+        <set name="students" table="student_quiz" inverse="true" fetch="join">
+            <key column="quiz_id"/>
+            <many-to-many column="student_id" class="org.example.models.Student"/>
+        </set>
+
+        <!-- Many-to-one Relationship with teacher -->
+        <many-to-one name="teacher" column="teacher_id" class="org.example.models.Teacher"/>
+
+
+    </class>
+</hibernate-mapping>

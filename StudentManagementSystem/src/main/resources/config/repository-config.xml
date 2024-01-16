@@ -1,0 +1,94 @@
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- Define DataSource -->
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="jdbcUrl" value="jdbc:mysql://localhost/studentManagementSystemDB"/>
+        <property name="username" value="root"/>
+        <property name="password" value="ahmed"/>
+    </bean>
+
+    <!-- Define JPA Configuration -->
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="persistenceUnitName" value="StudentManagementSystemPersistenceUnit"/>
+        <property name="mappingResources">
+            <list>
+                <value>META-INF/Student.hbm.xml</value>
+                <value>META-INF/Course.hbm.xml</value>
+                <value>META-INF/Teacher.hbm.xml</value>
+                <value>META-INF/Quiz.hbm.xml</value>
+            </list>
+        </property>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+        </property>
+    </bean>
+
+    <!-- Entity Manager -->
+    <bean id="entityManager" class="org.springframework.orm.jpa.support.SharedEntityManagerBean">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="save*" propagation="REQUIRED"/>
+            <tx:method name="delete*" propagation="REQUIRED"/>
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <tx:method name="*" propagation="SUPPORTS" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="studentServiceOperation" expression="execution(* org.example.services.studentService.*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="studentServiceOperation"/>
+    </aop:config>
+
+    <aop:config>
+        <aop:pointcut id="teacherServiceOperation" expression="execution(* org.example.services.teacherService.*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="teacherServiceOperation"/>
+    </aop:config>
+
+    <aop:config>
+        <aop:pointcut id="courseServiceOperation" expression="execution(* org.example.services.courseService.*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="courseServiceOperation"/>
+    </aop:config>
+
+    <aop:config>
+        <aop:pointcut id="quizServiceOperation" expression="execution(* org.example.services.quizService.*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="quizServiceOperation"/>
+    </aop:config>
+
+    <!-- Student Repository -->
+    <bean id="studentRepository" class="org.example.repositories.studentRepository.StudentRepositoryImpl">
+        <constructor-arg ref="entityManager"/>
+    </bean>
+
+    <!-- Teacher Repository -->
+    <bean id="teacherRepository" class="org.example.repositories.teacherRepository.TeacherRepositoryImpl">
+        <constructor-arg ref="entityManager"/>
+    </bean>
+
+    <!-- Course Repository -->
+    <bean id="courseRepository" class="org.example.repositories.courseRepository.CourseRepositoryImpl">
+        <constructor-arg ref="entityManager"/>
+    </bean>
+
+    <!-- Quiz Repository -->
+    <bean id="quizRepository" class="org.example.repositories.quizRepository.QuizRepositoryImpl">
+        <constructor-arg ref="entityManager"/>
+    </bean>
+
+</beans>

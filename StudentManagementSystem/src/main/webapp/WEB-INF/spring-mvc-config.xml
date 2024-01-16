@@ -1,0 +1,39 @@
+<!-- spring-mvc-config.xml -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <!-- Import application-context configurations -->
+    <import resource="classpath:config/application-context.xml"/>
+
+    <!-- Define URL Mappings -->
+    <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="mappings">
+            <props>
+                <prop key="/students/get/{id}">studentController</prop>
+                <prop key="/students/add">studentController</prop>
+                <prop key="/students/update">studentController</prop>
+                <prop key="/students/delete/{id}">studentController</prop>
+
+                <prop key="/teachers/get/{id}">teacherController</prop>
+                <prop key="/teachers/add">teacherController</prop>
+                <prop key="/teachers/update">teacherController</prop>
+                <prop key="/teachers/delete/{id}">teacherController</prop>
+
+                <prop key="/courses/get/{id}">courseController</prop>
+                <prop key="/courses/add">courseController</prop>
+                <prop key="/courses/update">courseController</prop>
+                <prop key="/courses/delete/{id}">courseController</prop>
+
+                <prop key="/quizzes/get/{id}">quizController</prop>
+                <prop key="/quizzes/add">quizController</prop>
+                <prop key="/quizzes/update">quizController</prop>
+                <prop key="/quizzes/delete/{id}">quizController</prop>
+            </props>
+        </property>
+    </bean>
+
+</beans>

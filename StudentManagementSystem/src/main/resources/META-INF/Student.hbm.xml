@@ -1,0 +1,26 @@
+<hibernate-mapping xmlns="http://www.hibernate.org/xsd/hibernate-mapping">
+    <class name="org.example.models.Student" table="student">
+        <id name="id" type="int">
+            <column name="id"/>
+            <generator class="identity"/>
+        </id>
+
+        <property name="name"/>
+        <property name="email"/>
+        <property name="address"/>
+
+        <!-- Many-to-Many Relationship with course -->
+        <set name="courses" table="student_course" fetch="join">
+            <key column="student_id"/>
+            <many-to-many column="course_id" class="org.example.models.Course"/>
+        </set>
+
+        <!-- Many-to-Many Relationship with quiz -->
+        <set name="quizzes" table="student_quiz" fetch="join">
+            <key column="student_id"/>
+            <many-to-many column="quiz_id" class="org.example.models.Quiz"/>
+        </set>
+
+
+    </class>
+</hibernate-mapping>

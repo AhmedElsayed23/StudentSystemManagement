@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- Import repository configurations -->
+    <import resource="classpath:config/repository-config.xml"/>
+
+    <!-- Define service beans -->
+    <bean id="studentService" class="org.example.services.studentService.StudentServiceImpl">
+        <constructor-arg ref="studentRepository"/>
+    </bean>
+
+    <bean id="teacherService" class="org.example.services.teacherService.TeacherServiceImpl">
+        <constructor-arg ref="teacherRepository"/>
+    </bean>
+
+    <bean id="courseService" class="org.example.services.courseService.CourseServiceImpl">
+        <constructor-arg ref="courseRepository"/>
+    </bean>
+
+    <bean id="quizService" class="org.example.services.quizService.QuizServiceImpl">
+        <constructor-arg ref="quizRepository"/>
+    </bean>
+
+</beans>

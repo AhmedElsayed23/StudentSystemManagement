@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- Import service configurations -->
+    <import resource="classpath:config/service-config.xml"/>
+
+    <!-- Define controllers beans -->
+    <bean id="studentController" class="org.example.controllers.studentController.StudentControllerImpl">
+        <constructor-arg ref="studentService"/>
+    </bean>
+
+    <bean id="teacherController" class="org.example.controllers.teacherController.TeacherControllerImpl">
+        <constructor-arg ref="teacherService"/>
+    </bean>
+
+    <bean id="courseController" class="org.example.controllers.courseController.CourseControllerImpl">
+        <constructor-arg ref="courseService"/>
+    </bean>
+
+    <bean id="quizController" class="org.example.controllers.quizController.QuizControllerImpl">
+        <constructor-arg ref="quizService"/>
+    </bean>
+
+    <!-- Define URL mapping -->
+    <bean id="handlerMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="mappings">
+            <props>
+                <prop key="/student">studentController</prop>
+                <prop key="/teacher">teacherController</prop>
+                <prop key="/course">courseController</prop>
+                <prop key="/quiz">quizController</prop>
+            </props>
+        </property>
+    </bean>
+
+</beans>
